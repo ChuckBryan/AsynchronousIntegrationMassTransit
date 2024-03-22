@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Service1/Dockerfile
     environment: 
-      RABBITMQ_HOST: localhost 
+      RABBITMQ_HOST: rabbitmq 
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: Service2/Dockerfile
     environment:
-      RABBITMQ_HOST: localhost
+      RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest

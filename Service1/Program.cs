@@ -1,4 +1,6 @@
-using RabbitMQ.Client;
+using HealthChecks.UI.Client;
+using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://localhost:5000");
@@ -15,11 +17,25 @@ string pass = builder.Configuration["RABBITMQ_PASS"] ??
               throw new InvalidOperationException("RABBITMQ_USER configuration is invalid");
 string user = builder.Configuration["RABBITMQ_USER"]??
               throw new InvalidOperationException("RABBITMQ_PASS configuration is invalid");
-
+string vhost = "/";
 // Add health check services: https://www.nuget.org/packages/AspNetCore.HealthChecks.Rabbitmq/
 builder.Services
     .AddHealthChecks()
-    .AddRabbitMQ(rabbitConnectionString:$"amqp://{user}:{pass}@{host}:{port}/");
+    .AddRabbitMQ(rabbitConnectionString:$"amqp://guest:guest@rabbitmq-1:5672");
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(host: "rabbitmq-1", "/", h =>
+        {
+            h.Username(user);
+            h.Password(pass);
+        });
+        
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 
@@ -31,6 +47,9 @@ if (app.Environment.IsDevelopment())
 }
 
 // Map a health endpoint
-app.MapHealthChecks("/health").WithName("Health").WithOpenApi();
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+}).WithName("Health").WithOpenApi();
 
 app.Run();

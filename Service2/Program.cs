@@ -17,11 +17,11 @@ string pass = builder.Configuration["RABBITMQ_PASS"] ??
               throw new InvalidOperationException("RABBITMQ_USER configuration is invalid");
 string user = builder.Configuration["RABBITMQ_USER"]??
               throw new InvalidOperationException("RABBITMQ_PASS configuration is invalid");
-
+string vhost = "/";
 // Add health check services: https://www.nuget.org/packages/AspNetCore.HealthChecks.Rabbitmq/
 builder.Services
     .AddHealthChecks()
-    .AddRabbitMQ(rabbitConnectionString:$"amqp://{user}:{pass}@{host}:{port}/");
+    .AddRabbitMQ(rabbitConnectionString:$"amqp://guest:guest@rabbitmq-1/vhost");
     
 
 var app = builder.Build();
