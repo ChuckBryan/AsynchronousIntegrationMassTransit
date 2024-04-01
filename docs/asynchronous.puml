@@ -1,0 +1,30 @@
+﻿@startuml
+!theme lightgray
+skinparam style strictuml
+skinparam DefaultFontName Arial
+skinparam backgroundColor White
+
+entity "Client\n(Sender)" as Client
+queue "Message Bus" as Bus
+participant "Basket Service\n(Subscriber, Sender)" as BS
+participant "Catalog Service\n(Subscriber, Sender)" as CS
+participant "Other Service\n(Subscriber)" as OS
+
+Client -> Bus : Message
+
+
+activate BS
+Bus --> BS: Message
+BS -> Bus : New Message
+deactivate BS
+
+activate CS
+Bus --> CS: New Message
+CS -> Bus : Another New Message
+deactivate CS
+
+activate OS
+Bus --> OS: Another New Message
+deactivate OS
+
+@enduml

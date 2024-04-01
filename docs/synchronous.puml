@@ -1,0 +1,25 @@
+﻿@startuml
+!theme lightgray
+
+skinparam style strictuml
+skinparam DefaultFontName Arial
+skinparam backgroundColor White
+
+participant Client
+participant "Basket Service" as BS
+participant "Catalog Service" as CS
+participant "Other Services..." as OS
+
+Client -> BS: Request
+activate BS
+BS -> CS: Request
+activate CS
+CS -> OS: Request
+activate OS
+OS --> CS: Response
+deactivate OS
+CS --> BS: Response
+deactivate CS
+BS --> Client: Response
+deactivate BS
+@enduml

@@ -1,6 +1,13 @@
-@Service1_HostAddress = http://localhost:5089
+@Service1_HostAddress = http://localhost:8081
 
-GET {{Service1_HostAddress}}/weatherforecast/
-Accept: application/json
+### Post Email Change
+POST {{Service1_HostAddress}}/publish/
+Content-Type: application/json
+
+{
+  "FullName": "John Doe",
+  "EmailAddress": "johndoe@example.com",
+  "RegistrationTime": "2023-05-04T18:13:51.0Z"
+}
 
 ###

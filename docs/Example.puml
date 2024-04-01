@@ -1,0 +1,23 @@
+@startuml
+!theme lightgray
+skinparam style strictuml
+skinparam DefaultFontName Arial
+skinparam backgroundColor White
+
+Client -> BasketService: CheckoutRequest
+activate BasketService
+
+BasketService -> CatalogService: ReduceInventoryRequest
+activate CatalogService
+CatalogService -->> BasketService: Acknowledge inventory reduction
+deactivate CatalogService
+
+BasketService -> BasketService: Clear Basket
+
+BasketService -> EmailService: SendCheckoutConfirmation
+activate EmailService
+EmailService -->> : Email sent to client
+deactivate EmailService
+
+deactivate BasketService
+@enduml

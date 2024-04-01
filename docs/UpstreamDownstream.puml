@@ -1,0 +1,21 @@
+﻿@startuml
+!theme lightgray
+skinparam style strictuml
+skinparam DefaultFontName Arial
+skinparam backgroundColor White
+
+participant "Service A \n(Downstream)" as A
+participant "Service B \n(Upstream)" as B
+participant "Service C \n(Downstream)" as C
+
+A -> B: API Call
+activate B
+B --> A: API Response
+deactivate B
+
+B -> C: API Call
+activate C
+C --> B: API Response
+deactivate C
+
+@enduml

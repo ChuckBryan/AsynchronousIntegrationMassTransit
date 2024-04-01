@@ -1,0 +1,41 @@
+# This is a generated file. Not intended for manual editing.
+version: "3"
+services:
+  service1:
+    build:
+      context: "C:\\projects\\Github\\AsynchronousIntegrationMassTransit"
+      dockerfile: "Service1/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Service1.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "service1:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\swamp\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\projects\\Github\\AsynchronousIntegrationMassTransit\\Service1:/app:rw"
+    - "C:\\projects\\Github\\AsynchronousIntegrationMassTransit:/src:rw"
+    working_dir: "/app"
+  service2:
+    build:
+      context: "C:\\projects\\Github\\AsynchronousIntegrationMassTransit"
+      dockerfile: "Service2/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Service2.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "service2:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\swamp\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\projects\\Github\\AsynchronousIntegrationMassTransit\\Service2:/app:rw"
+    - "C:\\projects\\Github\\AsynchronousIntegrationMassTransit:/src:rw"
+    working_dir: "/app"

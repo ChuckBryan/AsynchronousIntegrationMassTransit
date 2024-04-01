@@ -1,0 +1,29 @@
+﻿@startuml
+!theme lightgray
+skinparam style strictuml
+skinparam DefaultFontName Arial
+skinparam backgroundColor White
+
+  [Client\n(Sender)]
+
+component "API Gateway" as Gateway
+
+package "Services" {
+ 
+  [Catalogue Service\n(Subscriber, Sender)]
+  [Basket Service\n(Subscriber, Sender)]
+  [Other Service\n(Subscriber)]
+}
+
+queue "Message Bus" as Bus
+
+[Client\n(Sender)] --> Gateway : http
+Gateway --> [Basket Service\n(Subscriber, Sender)] :http
+[Catalogue Service\n(Subscriber, Sender)] --> Bus :amqp
+[Basket Service\n(Subscriber, Sender)] --> Bus :amqp
+
+Bus --> [Basket Service\n(Subscriber, Sender)] :amqp
+Bus --> [Catalogue Service\n(Subscriber, Sender)]
+Bus --> [Other Service\n(Subscriber)]
+
+@enduml

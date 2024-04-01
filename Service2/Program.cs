@@ -1,5 +1,7 @@
+using MassTransit;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
+using Service2.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +19,29 @@ string pass = builder.Configuration["RABBITMQ_PASS"] ??
               throw new InvalidOperationException("RABBITMQ_USER configuration is invalid");
 string user = builder.Configuration["RABBITMQ_USER"]??
               throw new InvalidOperationException("RABBITMQ_PASS configuration is invalid");
-string vhost = "/";
+
 // Add health check services: https://www.nuget.org/packages/AspNetCore.HealthChecks.Rabbitmq/
 builder.Services
     .AddHealthChecks()
-    .AddRabbitMQ(rabbitConnectionString:$"amqp://guest:guest@rabbitmq-1/vhost");
+    .AddRabbitMQ(rabbitConnectionString:$"amqp://{user}:{pass}@{host}");
     
+builder.Services.AddMassTransit(busConfig =>
+{
+
+    busConfig.AddConsumer<Consumer1>();
+    busConfig.AddConsumer<Consumer2>();
+    
+    busConfig.UsingRabbitMq((context, rmqHost) =>
+    {
+        rmqHost.Host(host, rmqHostConfig =>
+        {
+            rmqHostConfig.Username(user);
+            rmqHostConfig.Password(pass);
+        });
+       
+        rmqHost.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 
